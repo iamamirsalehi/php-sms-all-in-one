@@ -18,6 +18,9 @@ class Curl
     /**@var array $header */
     private $header = [];
 
+    /**@var string $uri */
+    private $uri;
+
     public function __construct(string $url, string $apiKey)
     {
         $this->url = $url;
@@ -38,6 +41,13 @@ class Curl
         return $this;
     }
 
+    public function addUri(string $uri): self
+    {
+        $this->uri = $uri;
+
+        return $this;
+    }
+
     public function setHeader(array $header): self
     {
         $this->header = $header;
@@ -50,7 +60,7 @@ class Curl
         $params = http_build_query($parameters);
 
         $init = curl_init();
-        curl_setopt($init, CURLOPT_URL, $this->url);
+        curl_setopt($init, CURLOPT_URL, $this->url . $this->uri);
         curl_setopt($init, CURLOPT_HTTPHEADER, $this->header);
         curl_setopt($init, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($init, CURLOPT_SSL_VERIFYHOST, false);

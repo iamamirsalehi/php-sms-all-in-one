@@ -1,6 +1,6 @@
 <?php
 
-namespace Iamamirsalehi\Sms\Abstracts;
+namespace Iamamirsalehi\Sms\Abstracts\Providers;
 
 interface HasPairSender
 {

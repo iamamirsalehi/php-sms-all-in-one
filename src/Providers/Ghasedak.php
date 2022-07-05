@@ -2,10 +2,13 @@
 
 namespace Iamamirsalehi\Sms\Providers;
 
-use Iamamirsalehi\Sms\Abstracts\ProviderAbstract;
+use Iamamirsalehi\Sms\Abstracts\DTOs\DTOInterface;
+use Iamamirsalehi\Sms\Abstracts\Providers\HasBulkSender;
+use Iamamirsalehi\Sms\Abstracts\Providers\HasPairSender;
+use Iamamirsalehi\Sms\Abstracts\Providers\ProviderAbstract;
 use Iamamirsalehi\Sms\Tools\Curl;
 
-class Ghasedak implements ProviderAbstract
+class Ghasedak implements ProviderAbstract, HasPairSender, HasBulkSender
 {
     /**@var string $apiKey */
     private $apiKey;
@@ -19,13 +22,33 @@ class Ghasedak implements ProviderAbstract
         $this->curl = new Curl('http://api.ghasedak.me/v2/', $this->apiKey);
     }
 
-    public function send(string $mobileNumber, string $msg): array
+    public function send(DTOInterface $data): array
     {
-        return $this->curl->asGet()->setHeader([
+        $params = [
+            "receptor" => $data->getReceptor(),
+            "linenumber" => $data->getLineNumber(),
+            "message" => $data->getMessage(),
+            "senddate" => $data->getSendDate(),
+            "checkid" => $data->getCheckId(),
+        ];
+
+        $headers = [
             'apikey:' . $this->apiKey,
             'Accept: application/json',
             'Content-Type: application/x-www-form-urlencoded',
             'charset: utf-8',
-        ])->sendRequest();
+        ];
+
+        return $this->curl->asPOST()->setHeader($headers)->addUri('sms/send/simple')->sendRequest($params);
+    }
+
+    public function sendBulk(array $parameters): array
+    {
+        return [];
+    }
+
+    public function sendPair(array $parameters): array
+    {
+        return [];
     }
 }

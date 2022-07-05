@@ -2,7 +2,8 @@
 
 namespace Iamamirsalehi\Sms;
 
-use Iamamirsalehi\Sms\Abstracts\ProviderAbstract;
+use Iamamirsalehi\Sms\Abstracts\DTOs\DTOInterface;
+use Iamamirsalehi\Sms\Abstracts\Providers\ProviderAbstract;
 
 class SMS implements ProviderAbstract
 {
@@ -14,8 +15,8 @@ class SMS implements ProviderAbstract
         $this->provider = $provider;
     }
 
-    public function send(string $mobileNumber, string $msg): array
+    public function send(DTOInterface $data): array
     {
-        return $this->provider->send($mobileNumber, $msg);
+        return $this->provider->send($data);
     }
 }
