@@ -14,7 +14,7 @@ class SMS implements ProviderAbstract
         $this->provider = $provider;
     }
 
-    public function send(string $mobileNumber, string $msg): bool
+    public function send(string $mobileNumber, string $msg): array
     {
         return $this->provider->send($mobileNumber, $msg);
     }
